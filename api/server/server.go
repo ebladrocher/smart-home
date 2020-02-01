@@ -2,66 +2,60 @@ package server
 
 import (
 	"fmt"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	"github.com/op/go-logging"
+	"github.com/sirupsen/logrus"
 	"net/http"
-	v1 "smarthome/api/server/controllers/v1"
-	"smarthome/system/config"
-)
-var (
-	log = logging.MustGetLogger("server")
+	"smarthome/system/store"
 )
 
 type Server struct {
-	Config *ServerConfig
+	config *ServerConfig
 	server *http.Server
-	engine *gin.Engine
-	Controllers *v1.Controllers
-	logger *ServerLogger
+	router *Router
+	logger *logrus.Logger
+	store *store.Store
+
 }
 
-func (s *Server) Start() {
+func (s *Server) Start() error{
 	s.server = &http.Server{
-		Addr: fmt.Sprintf("%s:%d", s.Config.Host, s.Config.Port),
-		Handler: s.engine,
+		Addr: fmt.Sprintf("%s:%d", s.config.Host, s.config.Port),
+		Handler: s.router.router,
 	}
 
-	if err := s.server.ListenAndServe(); err != nil && err != http.ErrServerClosed{
-		fmt.Println("listen: %s\n", err)
+	if err := s.configureLogger(); err != nil {
+		return err
 	}
+
+	s.router.configureRouter()
+
+	if err := s.store.ConfigureStore(); err != nil {
+		return err
+	}
+	return s.server.ListenAndServe()
+
 }
+
 
 func NewServer(
 	cfg *ServerConfig,
-	contr *v1.Controllers,
 	) (newServer *Server) {
 
-	logger := &ServerLogger{log}
-
-	gin.DisableConsoleColor()
-	gin.DefaultWriter = logger
-	gin.DefaultErrorWriter = logger
-	if cfg.RunMode == config.ReleaseMode {
-		gin.SetMode(gin.ReleaseMode)
-	} else if cfg.RunMode == config.DebugMode {
-		gin.SetMode(gin.DebugMode)
-	}
-
-	engine := gin.New()
-	engine.Use(gin.Recovery())
-
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowAllOrigins = true
-	engine.Use(cors.New(corsConfig))
-
 	newServer = &Server{
-		Config: cfg,
-		engine: engine,
-		Controllers: contr,
+		config: cfg,
+		logger: logrus.New(),
+		router: New(),
+		store: store.Init(),
 	}
-
-	newServer.setControllers()
 
 	return
+}
+
+func (s *Server) configureLogger() error{
+	level, err := logrus.ParseLevel(s.config.RunMode)
+	if err != nil{
+		return err
+	}
+
+	s.logger.SetLevel(level)
+	return nil
 }
