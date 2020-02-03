@@ -10,7 +10,8 @@ type ServerConfig struct {
 	RunMode string
 }
 
-func NewServerConfig(cfg *config.AppConfig) *ServerConfig {
+func NewServerConfig(/*cfg *config.AppConfig*/) *ServerConfig {
+	cfg, _ := config.ReadConfig()
 	return &ServerConfig{
 		Host: cfg.ServerHost,
 		Port: cfg.ServerPort,

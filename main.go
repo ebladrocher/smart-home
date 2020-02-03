@@ -2,7 +2,6 @@ package main
 
 import (
 	"smarthome/api/server"
-	"smarthome/system/config"
 )
 
 func main() {
@@ -10,14 +9,14 @@ func main() {
 }
 
 func start() {
-	r, _ := config.ReadConfig()
+	/*r, _ := config.ReadConfig()
 	cfg := config.AppConfig{}
 	cfg.ServerHost = r.ServerHost
 	cfg.ServerPort = r.ServerPort
 	cfg.Mode = r.Mode
-	srv := server.NewServerConfig(&cfg)
-	srvstrt := server.NewServer(srv)
-	srvstrt.Start()
+	srv := server.NewServerConfig(&cfg)*/
+	srv := server.NewServer()
+	srv.Start()
 }
 
 
