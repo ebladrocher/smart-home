@@ -11,12 +11,13 @@ type Store struct {
 }
 
 func Init() *Store {
-	return &Store{}
+	tmp := NewDbConfig()
+	return &Store{config:tmp}
 }
 
 func (s *Store) Open() error {
-	tmp := NewDbConfig()
-	db, err := sql.Open("postgres", tmp.ConnectionSting())
+	//tmp := NewDbConfig()
+	db, err := sql.Open("postgres", s.config.ConnectionSting())
 	if err != nil {
 		return err
 	}
