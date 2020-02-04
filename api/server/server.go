@@ -24,12 +24,13 @@ func (s *Server) Start() error{
 	if err := s.store.ConfigureStore(); err != nil {
 		return err
 	}
-	return s.server.ListenAndServe()
 
+	return s.server.ListenAndServe()
 }
 
 func NewServer(
-	/*cfg *ServerConfi,*/
+	/*cfg *ServerConfig,
+	*db *store.Store,*/
 	) (newServer *Server) {
 	cfg := NewServerConfig()
 	newServer = &Server{

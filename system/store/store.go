@@ -6,7 +6,7 @@ import (
 )
 
 type Store struct {
-	config *Config
+	config *DbConfig
 	db *sql.DB
 }
 
@@ -14,15 +14,9 @@ func Init() *Store {
 	return &Store{}
 }
 
-func New() *Store {
-	tmp, _ := ReadConfig()
-	var s = Store{config: tmp}
-	return &s
-}
-
-
 func (s *Store) Open() error {
-	db, err := sql.Open("postgres", s.config.DatabasseUrl)
+	tmp := NewDbConfig()
+	db, err := sql.Open("postgres", tmp.ConnectionSting())
 	if err != nil {
 		return err
 	}
@@ -38,13 +32,10 @@ func (s *Store) Close() {
 }
 
 func (s *Store) ConfigureStore() error {
-	st := New()
-	if err := st.Open(); err != nil {
+	if err := s.Open(); err != nil {
 		return err
 	}
 
-	s.db=st.db
-	s.config = st.config
 	return nil
 }
 

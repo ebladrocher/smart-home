@@ -1,26 +1,26 @@
 package store
 
 import (
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"log"
+	"fmt"
+	"smarthome/system/config"
 )
 
-const path = "conf/dbconfig.yml"
+type DbConfig struct {
+	Name string
+	Host string
+	Port string
+}
 
-func ReadConfig() (conf *Config, err error) {
-	var file []byte
-	file, err = ioutil.ReadFile(path)
-	if err != nil {
-		log.Fatal("Error reading config file")
-		return
+func (db *DbConfig) ConnectionSting() string {
+	return fmt.Sprintf("host=%s port=%s dbname=%s sslmode=disable", db.Host, db.Port, db.Name)
+}
+
+func NewDbConfig(/*cfg *config.AppConfig*/) *DbConfig  {
+	cfg, _ := config.ReadConfig()
+	return &DbConfig{
+		Name: cfg.DbName,
+		Host: cfg.DbHost,
+		Port: cfg.DbPort,
 	}
-	conf = &Config{}
-	err = yaml.Unmarshal(file, &conf)
-	if err != nil {
-		log.Fatal("Error: wrong format of config file")
-		return
-	}
-	return
 }
 
