@@ -10,13 +10,11 @@ type Store struct {
 	db *sql.DB
 }
 
-func Init() *Store {
-	tmp := NewDbConfig()
-	return &Store{config:tmp}
+func Init(cfg *DbConfig) *Store {
+	return &Store{config: cfg}
 }
 
 func (s *Store) Open() error {
-	//tmp := NewDbConfig()
 	db, err := sql.Open("postgres", s.config.ConnectionSting())
 	if err != nil {
 		return err

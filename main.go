@@ -2,20 +2,30 @@ package main
 
 import (
 	"smarthome/api/server"
+	"smarthome/system/config"
+	"smarthome/system/store"
 )
+
 
 func main() {
 	start()
 }
 
 func start() {
-	/*r, _ := config.ReadConfig()
-	cfg := config.AppConfig{}
-	cfg.ServerHost = r.ServerHost
-	cfg.ServerPort = r.ServerPort
-	cfg.Mode = r.Mode
-	srv := server.NewServerConfig(&cfg)*/
-	srv := server.NewServer()
+
+	conf, _ :=config.ReadConfig()
+	cfg := config.AppConfig{
+		ServerHost:conf.ServerHost,
+		ServerPort:conf.ServerPort,
+		Mode:conf.Mode,
+		DbHost:conf.DbHost,
+		DbPort:conf.DbPort,
+		DbName:conf.DbName,
+	}
+	srvConf := server.NewServerConfig(&cfg)
+	dbConf := store.NewDbConfig(&cfg)
+	storeConf := store.Init(dbConf)
+	srv := server.NewServer(srvConf,storeConf)
 	srv.Start()
 }
 

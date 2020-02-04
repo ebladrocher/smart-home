@@ -29,14 +29,13 @@ func (s *Server) Start() error{
 }
 
 func NewServer(
-	/*cfg *ServerConfig,
-	*db *store.Store,*/
+	cfg *ServerConfig,
+	db *store.Store,
 	) (newServer *Server) {
-	cfg := NewServerConfig()
 	newServer = &Server{
 		config: cfg,
 		router: New(),
-		store: store.Init(),
+		store: db,
 	}
 
 	return
