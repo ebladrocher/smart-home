@@ -6,11 +6,14 @@ import (
 	"smarthome/system/store"
 )
 
+
+
 type Server struct {
 	config *ServerConfig
 	server *http.Server
 	router *Router
 	store *store.Store
+	logger *ServerLogger
 }
 
 func (s *Server) Start() error{
@@ -25,17 +28,22 @@ func (s *Server) Start() error{
 		return err
 	}
 
+	s.logger.Logger.Info("start apiServer")
+
 	return s.server.ListenAndServe()
 }
 
 func NewServer(
 	cfg *ServerConfig,
 	db *store.Store,
+	log *ServerLogger,
 	) (newServer *Server) {
+
 	newServer = &Server{
 		config: cfg,
 		router: New(),
 		store: db,
+		logger: log,
 	}
 
 	return

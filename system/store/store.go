@@ -10,7 +10,7 @@ type Store struct {
 	db *sql.DB
 }
 
-func Init(cfg *DbConfig) *Store {
+func InitStore(cfg *DbConfig) *Store {
 	return &Store{config: cfg}
 }
 

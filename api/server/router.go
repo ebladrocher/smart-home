@@ -10,8 +10,7 @@ type Router struct {
 }
 
 func New() *Router{
-	var s = Router{router:mux.NewRouter()}
-	return &s
+	return &Router{router:mux.NewRouter()}
 }
 
 func (s *Router) configureRouter()  {

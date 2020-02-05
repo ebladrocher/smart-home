@@ -7,7 +7,7 @@ import (
 type ServerConfig struct {
 	Host string
 	Port int
-	RunMode string
+	RunMode config.RunMode
 }
 
 func NewServerConfig(cfg *config.AppConfig) *ServerConfig {

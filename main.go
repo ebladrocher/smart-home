@@ -22,10 +22,11 @@ func start() {
 		DbPort:conf.DbPort,
 		DbName:conf.DbName,
 	}
+	logConfig := server.InitLogger(&cfg)
 	srvConf := server.NewServerConfig(&cfg)
 	dbConf := store.NewDbConfig(&cfg)
-	storeConf := store.Init(dbConf)
-	srv := server.NewServer(srvConf,storeConf)
+	storeConf := store.InitStore(dbConf)
+	srv := server.NewServer(srvConf, storeConf, logConfig)
 	srv.Start()
 }
 
