@@ -15,7 +15,7 @@ func InitLogger(cfg *config.AppConfig) *ServerLogger {
 	var level zapcore.Level
 
 	var w = zapcore.AddSync(&lumberjack.Logger{
-		Filename:   "~/var/log/smarthome/logger.log",
+		Filename:   "var/log/logger.log",
 		MaxSize:    500, // megabytes
 		MaxBackups: 3,
 		MaxAge:     28, // days

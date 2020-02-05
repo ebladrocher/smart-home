@@ -28,7 +28,7 @@ func (s *Server) Start() error{
 		return err
 	}
 
-	s.logger.Logger.Info("start apiServer")
+	//s.logger.Logger.Info("start apiServer")
 
 	return s.server.ListenAndServe()
 }
