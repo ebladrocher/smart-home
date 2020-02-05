@@ -22,7 +22,7 @@ func (s *Server) Start() error{
 		Handler: s.router.router,
 	}
 
-	s.router.configureRouter()
+	s.router.ConfigureRouter()
 
 	if err := s.store.ConfigureStore(); err != nil {
 		return err
@@ -41,7 +41,7 @@ func NewServer(
 
 	newServer = &Server{
 		config: cfg,
-		router: New(),
+		router: NewRouter(),
 		store: db,
 		logger: log,
 	}

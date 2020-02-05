@@ -9,11 +9,11 @@ type Router struct {
 	router *mux.Router
 }
 
-func New() *Router{
+func NewRouter() *Router{
 	return &Router{router:mux.NewRouter()}
 }
 
-func (s *Router) configureRouter()  {
+func (s *Router) ConfigureRouter()  {
 	s.router.HandleFunc("/", s.handleIndex())
 }
 
