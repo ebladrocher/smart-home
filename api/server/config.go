@@ -1,7 +1,7 @@
 package server
 
 import (
-	"smarthome/system/config"
+	"github.com/ebladrocher/smarthome/system/config"
 	)
 
 type ServerConfig struct {

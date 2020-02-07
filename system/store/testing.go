@@ -2,7 +2,7 @@ package store
 
 import (
 	"fmt"
-	"smarthome/system/config"
+	"github.com/ebladrocher/smarthome/system/config"
 	"strings"
 	"testing"
 )

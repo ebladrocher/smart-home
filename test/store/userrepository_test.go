@@ -2,8 +2,8 @@ package store_test
 
 import (
 	"github.com/stretchr/testify/assert"
-	"smarthome/models"
-	"smarthome/system/store"
+	"github.com/ebladrocher/smarthome/models"
+	"github.com/ebladrocher/smarthome/system/store"
 	"testing"
 )
 

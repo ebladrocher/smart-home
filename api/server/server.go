@@ -3,7 +3,7 @@ package server
 import (
 	"fmt"
 	"net/http"
-	"smarthome/system/store"
+	"github.com/ebladrocher/smarthome/system/store"
 )
 
 

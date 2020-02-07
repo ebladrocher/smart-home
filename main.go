@@ -1,9 +1,9 @@
 package main
 
 import (
-	"smarthome/api/server"
-	"smarthome/system/config"
-	"smarthome/system/store"
+	"github.com/ebladrocher/smarthome/api/server"
+	"github.com/ebladrocher/smarthome/system/config"
+	"github.com/ebladrocher/smarthome/system/store"
 )
 
 

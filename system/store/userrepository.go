@@ -1,6 +1,6 @@
 package store
 
-import "smarthome/models"
+import "github.com/ebladrocher/smarthome/models"
 
 type UserRepository struct {
 	store *Store

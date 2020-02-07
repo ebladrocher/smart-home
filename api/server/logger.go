@@ -4,7 +4,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
-	"smarthome/system/config"
+	"github.com/ebladrocher/smarthome/system/config"
 )
 
 type ServerLogger struct {

@@ -2,7 +2,7 @@ package models_test
 
 import (
 	"github.com/stretchr/testify/assert"
-	"smarthome/models"
+	"github.com/ebladrocher/smarthome/models"
 	"testing"
 )
 
