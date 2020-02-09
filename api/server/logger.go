@@ -35,3 +35,30 @@ func InitLogger(cfg *config.AppConfig) *ServerLogger {
 	)
 	return &ServerLogger{Logger: zap.New(core)}
 }
+
+//func (s ServerLogger) Write(b []byte) (i int, err error) {
+//	s.Logger.Info(string(b))
+//	return
+//}
+
+/*
+cfg := zap.Config{
+    Encoding:         "json",
+    Level:            zap.NewAtomicLevelAt(zapcore.DebugLevel),
+    OutputPaths:      []string{"stderr"},
+    ErrorOutputPaths: []string{"stderr"},
+    EncoderConfig: zapcore.EncoderConfig{
+        MessageKey: "message",
+
+        LevelKey:    "level",
+        EncodeLevel: zapcore.CapitalLevelEncoder,
+
+        TimeKey:    "time",
+        EncodeTime: zapcore.ISO8601TimeEncoder,
+
+        CallerKey:    "caller",
+        EncodeCaller: zapcore.ShortCallerEncoder,
+    },
+}
+logger, _ = cfg.Build()
+ */

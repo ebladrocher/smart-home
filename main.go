@@ -26,7 +26,10 @@ func start() {
 	srvConf := server.NewServerConfig(&cfg)
 	dbConf := store.NewDbConfig(&cfg)
 	storeConf := store.InitStore(dbConf)
-	srv := server.NewServer(srvConf, storeConf, logConfig)
+	srv, err := server.NewServer(srvConf, storeConf, logConfig)
+	if err != nil {
+		panic(err.Error())
+	}
 	srv.Start()
 }
 

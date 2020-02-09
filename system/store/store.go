@@ -31,7 +31,7 @@ func (s *Store) Close() {
 	s.db.Close()
 }
 
-func (s *Store) ConfigureStore() error {
+func (s *Store) SetStore() error {
 	if err := s.Open(); err != nil {
 		return err
 	}
