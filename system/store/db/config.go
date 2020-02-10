@@ -1,22 +1,25 @@
-package store
+package db
 
 import (
 	"fmt"
 	"github.com/ebladrocher/smarthome/system/config"
 )
 
-type DbConfig struct {
+// ConfigDB ...
+type ConfigDB struct {
 	Name string
 	Host string
 	Port string
 }
 
-func (db *DbConfig) ConnectionSting() string {
+// ConnectionString ...
+func (db *ConfigDB) ConnectionSting() string {
 	return fmt.Sprintf("host=%s port=%s dbname=%s sslmode=disable", db.Host, db.Port, db.Name)
 }
 
-func NewDbConfig(cfg *config.AppConfig) *DbConfig  {
-	return &DbConfig{
+// NewDbConfig ,,,
+func NewDbConfig(cfg *config.AppConfig) *ConfigDB  {
+	return &ConfigDB{
 		Name: cfg.DbName,
 		Host: cfg.DbHost,
 		Port: cfg.DbPort,

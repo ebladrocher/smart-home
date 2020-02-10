@@ -2,15 +2,18 @@ package controllers
 
 import "net/http"
 
+// Controllers ...
 type Controllers struct {
 	Index *ControllerIndex
 }
 
+// NewControllers ...
 func NewControllers() *Controllers{
 	return &Controllers{
 		Index: NewControllerIndex()}
 }
 
+// enableCors ...
 func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }

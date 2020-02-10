@@ -5,8 +5,10 @@ import (
 	"io/ioutil"
 )
 
+// Path ...
 const path = "conf/config.json"
 
+// ReadConfig ...
 func ReadConfig() (conf *AppConfig, err error) {
 	var file []byte
 	file, err = ioutil.ReadFile(path)

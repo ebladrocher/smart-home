@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/ebladrocher/smarthome/api/server"
 	"github.com/ebladrocher/smarthome/system/config"
-	"github.com/ebladrocher/smarthome/system/store"
 )
 
 
@@ -11,6 +10,7 @@ func main() {
 	start()
 }
 
+// Start ...
 func start() {
 
 	conf, _ :=config.ReadConfig()
@@ -24,9 +24,7 @@ func start() {
 	}
 	logConfig := server.InitLogger(&cfg)
 	srvConf := server.NewServerConfig(&cfg)
-	dbConf := store.NewDbConfig(&cfg)
-	storeConf := store.InitStore(dbConf)
-	srv, err := server.NewServer(srvConf, storeConf, logConfig)
+	srv, err := server.NewServer(srvConf, logConfig)
 	if err != nil {
 		panic(err.Error())
 	}
