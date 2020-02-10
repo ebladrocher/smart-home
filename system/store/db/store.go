@@ -19,6 +19,7 @@ func NewStore(db *sql.DB) *Store {
 	}
 }
 
+// ConnectToDB ...
 func ConnectToDB(db *ConfigDB) (*sql.DB, error) {
 
 	tmp := func (dbURL string) (*sql.DB, error) {
@@ -33,7 +34,6 @@ func ConnectToDB(db *ConfigDB) (*sql.DB, error) {
 
 		return db, nil
 	}
-
 
  	qwerty, err := tmp(db.ConnectionSting())
  	if err != nil {

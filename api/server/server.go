@@ -41,6 +41,13 @@ func (s *Server) Start() {
 	}
 }
 
+// Shutdown ...
+
+// ServeHTTP ...
+func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request)  {
+	s.router.ServeHTTP(w, r)
+}
+
 // NewServer ...
 func NewServer(
 	cfg *ServerConfig,
@@ -55,10 +62,6 @@ func NewServer(
 		store:  store,
 		logger: log,
 	}
-
-	//if err := newServer.store.SetStore();err != nil {
-	//	return nil,err
-	//}
 
 	newServer.setControllers()
 
