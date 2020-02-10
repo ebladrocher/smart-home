@@ -1,7 +1,6 @@
 package store_test
 
 import (
-	"github.com/ebladrocher/smarthome/system/config"
 	"github.com/ebladrocher/smarthome/system/store/db"
 	"os"
 	"testing"
@@ -13,15 +12,14 @@ var (
 
 func TestMain(m *testing.M)  {
 
-	cfg := config.AppConfig{
-		DbHost:"localhost",
-		DbPort:"5432",
-		DbName: "smarthome_test",
+	cfg := db.ConfigDB{
+		Host:"localhost",
+		Port:"5432",
+		Name: "smarthome_test",
 	}
-	thisConfig := db.NewDbConfig(&cfg)
 
 	if dataBaseURL == "" {
-		dataBaseURL = thisConfig.ConnectionSting()
+		dataBaseURL = cfg.ConnectionSting()
 	}
 	os.Exit(m.Run())
 

@@ -1,12 +1,9 @@
 package server
 
 import (
-	"database/sql"
 	"fmt"
 	"github.com/ebladrocher/smarthome/api/server/controllers"
-	"github.com/ebladrocher/smarthome/system/config"
 	"github.com/ebladrocher/smarthome/system/store"
-	"github.com/ebladrocher/smarthome/system/store/db"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 	"net/http"
@@ -47,23 +44,9 @@ func (s *Server) Start() {
 // NewServer ...
 func NewServer(
 	cfg *ServerConfig,
-	//store store.Store,
+	store store.Store,
 	log *Logger,
 ) (*Server, error) {
-	tmp := config.AppConfig{
-		DbHost:"localhost",
-		DbPort:"5432",
-		DbName: "smarthome_test",
-	}
-	thisConfig := db.NewDbConfig(&tmp)
-
-	thisDB, err := newDB(thisConfig.ConnectionSting())
-	if err != nil {
-		return nil, err
-	}
-
-	defer thisDB.Close()
-	store := db.NewStore(thisDB)
 
 	newServer := &Server{
 		Config: cfg,
@@ -80,17 +63,4 @@ func NewServer(
 	newServer.setControllers()
 
 	return newServer, nil
-}
-
-func newDB(dbURL string) (*sql.DB, error) {
-	db, err := sql.Open("postgres", dbURL)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := db.Ping(); err != nil {
-		return nil, err
-	}
-
-	return db, nil
 }
