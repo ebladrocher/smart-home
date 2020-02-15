@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/ebladrocher/smarthome/api/server"
 	"github.com/ebladrocher/smarthome/system/config"
-	"github.com/ebladrocher/smarthome/system/store"
+	"github.com/ebladrocher/smarthome/system/store/sqlstore"
 )
 
 
@@ -11,24 +11,33 @@ func main() {
 	start()
 }
 
+// Start ...
 func start() {
 
-	conf, _ :=config.ReadConfig()
-	cfg := config.AppConfig{
-		ServerHost:conf.ServerHost,
-		ServerPort:conf.ServerPort,
-		Mode:conf.Mode,
-		DbHost:conf.DbHost,
-		DbPort:conf.DbPort,
-		DbName:conf.DbName,
+	cfg, _ :=config.ReadConfig()
+
+	thisDB, err  := sqlstore.ConnectToDB(
+		sqlstore.NewDbConfig(cfg),
+		)
+	if err != nil {
+		panic(err.Error())
 	}
-	logConfig := server.InitLogger(&cfg)
-	srvConf := server.NewServerConfig(&cfg)
-	dbConf := store.NewDbConfig(&cfg)
-	storeConf := store.InitStore(dbConf)
-	srv := server.NewServer(srvConf, storeConf, logConfig)
+
+	srv, err := server.NewServer(
+		server.NewServerConfig(cfg),
+		sqlstore.NewStore(thisDB),
+		server.InitLogger(cfg),
+		)
+	if err != nil {
+		panic(err.Error())
+	}
 	srv.Start()
 }
+
+//tmp := sqlstore.NewDbConfig(cfg)
+//store := sqlstore.NewStore(thisDB)
+//srvConf := server.NewServerConfig(cfg)
+//logConfig := server.InitLogger(cfg)
 
 
 

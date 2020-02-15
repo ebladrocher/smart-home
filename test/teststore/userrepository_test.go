@@ -1,28 +1,22 @@
-package store_test
+package teststore__test
 
 import (
 	"github.com/ebladrocher/smarthome/models"
 	"github.com/ebladrocher/smarthome/system/store"
-	"github.com/ebladrocher/smarthome/system/store/sqlstore"
+	"github.com/ebladrocher/smarthome/system/store/teststore"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestUserRepository_Create(t *testing.T) {
-	thisDB, teardown := sqlstore.TestDB(t, dataBaseURL)
-	defer teardown("users")
-
-	s := sqlstore.NewStore(thisDB)
+	s := teststore.NewStore()
 	u := models.TestUser(t)
 	assert.NoError(t, s.User().Create(u))
 	assert.NotNil(t, u)
 }
 
-func TestUserRepository_FindByEmail(t *testing.T) {
-	thisDB, teardown := sqlstore.TestDB(t, dataBaseURL)
-	defer teardown("users")
-
-	s := sqlstore.NewStore(thisDB)
+func TestUserRepository_FindByEmail(t *testing.T)  {
+	s := teststore.NewStore()
 	email := "user@user.org"
 	_, err := s.User().FindByEmail(email)
 	assert.EqualError(t, err, store.ErrRecordNotFound.Error())

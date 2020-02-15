@@ -7,11 +7,13 @@ import (
 	"github.com/ebladrocher/smarthome/system/config"
 )
 
-type ServerLogger struct {
+// Logger ...
+type Logger struct {
 	Logger *zap.Logger
 }
 
-func InitLogger(cfg *config.AppConfig) *ServerLogger {
+// InitLogger ...
+func InitLogger(cfg *config.AppConfig) *Logger {
 	var level zapcore.Level
 
 	var w = zapcore.AddSync(&lumberjack.Logger{
@@ -33,5 +35,32 @@ func InitLogger(cfg *config.AppConfig) *ServerLogger {
 		w,
 		level,
 	)
-	return &ServerLogger{Logger: zap.New(core)}
+	return &Logger{Logger: zap.New(core)}
 }
+
+//func (s ServerLogger) Write(b []byte) (i int, err error) {
+//	s.Logger.Info(string(b))
+//	return
+//}
+
+/*
+cfg := zap.Config{
+    Encoding:         "json",
+    Level:            zap.NewAtomicLevelAt(zapcore.DebugLevel),
+    OutputPaths:      []string{"stderr"},
+    ErrorOutputPaths: []string{"stderr"},
+    EncoderConfig: zapcore.EncoderConfig{
+        MessageKey: "message",
+
+        LevelKey:    "level",
+        EncodeLevel: zapcore.CapitalLevelEncoder,
+
+        TimeKey:    "time",
+        EncodeTime: zapcore.ISO8601TimeEncoder,
+
+        CallerKey:    "caller",
+        EncodeCaller: zapcore.ShortCallerEncoder,
+    },
+}
+logger, _ = cfg.Build()
+ */

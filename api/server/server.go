@@ -2,50 +2,68 @@ package server
 
 import (
 	"fmt"
-	"net/http"
+	"github.com/ebladrocher/smarthome/api/server/controllers"
 	"github.com/ebladrocher/smarthome/system/store"
+	"github.com/gorilla/mux"
+	"go.uber.org/zap"
+	"net/http"
 )
 
-
-
+// Server ...
 type Server struct {
-	config *ServerConfig
+	Config *ServerConfig
+	Controllers *controllers.Controllers
 	server *http.Server
-	router *Router
-	store *store.Store
-	logger *ServerLogger
+	router *mux.Router
+	store  store.Store
+	logger *Logger
 }
 
-func (s *Server) Start() error{
+// Server ...
+func (s *Server) Start() {
+
 	s.server = &http.Server{
-		Addr: fmt.Sprintf("%s:%d", s.config.Host, s.config.Port),
-		Handler: s.router.router,
+		Addr:    fmt.Sprintf("%s:%d", s.Config.Host, s.Config.Port),
+		Handler: s.router,
 	}
 
-	s.router.ConfigureRouter()
+	//s.logger.Logger.Info(
+	//	"Server start at",
+	//	zap.Any(s.Config.Host, s.Config.Port),
+	//)
 
-	if err := s.store.ConfigureStore(); err != nil {
-		return err
+
+	if err := s.server.ListenAndServe(); err != nil {
+		s.logger.Logger.Fatal(
+			"server start error",
+			zap.Error(err),
+		)
 	}
-
-	//s.logger.Logger.Info("start apiServer")
-
-	return s.server.ListenAndServe()
 }
 
+// Shutdown ...
+
+// ServeHTTP ...
+func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request)  {
+	s.router.ServeHTTP(w, r)
+}
+
+// NewServer ...
 func NewServer(
 	cfg *ServerConfig,
-	db *store.Store,
-	log *ServerLogger,
-	) (newServer *Server) {
+	store store.Store,
+	log *Logger,
+) (*Server, error) {
 
-	newServer = &Server{
-		config: cfg,
-		router: NewRouter(),
-		store: db,
+	newServer := &Server{
+		Config: cfg,
+		Controllers: controllers.NewControllers(),
+		router: mux.NewRouter(),
+		store:  store,
 		logger: log,
 	}
 
-	return
-}
+	newServer.setControllers()
 
+	return newServer, nil
+}

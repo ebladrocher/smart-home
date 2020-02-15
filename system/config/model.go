@@ -1,5 +1,6 @@
 package config
 
+// AppConfig ...
 type AppConfig struct {
 	ServerHost string `json:"server_host"`
 	ServerPort int    `json:"server_port"`
@@ -9,10 +10,13 @@ type AppConfig struct {
 	DbName     string `json:"db_name"`
 }
 
+// RunMode ...
 type RunMode string
 
 const (
+	// DebugMode ...
 	DebugMode   = RunMode("debug")
+	// RunMode ...
 	ReleaseMode = RunMode("release")
 )
 
