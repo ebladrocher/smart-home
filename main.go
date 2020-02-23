@@ -34,11 +34,6 @@ func start() {
 	srv.Start()
 }
 
-//tmp := sqlstore.NewDbConfig(cfg)
-//store := sqlstore.NewStore(thisDB)
-//srvConf := server.NewServerConfig(cfg)
-//logConfig := server.InitLogger(cfg)
-
 
 
 
