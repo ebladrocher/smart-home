@@ -1,16 +1,25 @@
-package controllers
+package handlers
 
-import "net/http"
+import (
+	"github.com/ebladrocher/smarthome/system/store"
+	"net/http"
+)
 
 // Controllers ...
-type Controllers struct {
-	Index *ControllerIndex
+type Handlers struct {
+	Index *HandlerIndex
+	User  *HandlerUser
 }
 
-// NewControllers ...
-func NewControllers() *Controllers{
-	return &Controllers{
-		Index: NewControllerIndex()}
+// NewHandlers ...
+func NewHandlers(
+	uc store.UseCase,
+) *Handlers {
+
+	return &Handlers{
+		Index: NewHandlerIndex(),
+		User:  NewHandlerUser(uc),
+	}
 }
 
 // enableCors ...

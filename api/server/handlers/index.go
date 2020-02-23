@@ -1,21 +1,21 @@
-package controllers
+package handlers
 
 import (
 	"net/http"
 )
 
 // ControllerIndex ...
-type ControllerIndex struct {
+type HandlerIndex struct {
 
 }
 
 // NewControllerIndex ...
-func NewControllerIndex() *ControllerIndex {
-	return &ControllerIndex{}
+func NewHandlerIndex() *HandlerIndex {
+	return &HandlerIndex{}
 }
 
 // HandleIndex ...
-func (i ControllerIndex ) HandleIndex() http.HandlerFunc {
+func (i HandlerIndex ) HandleIndex() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
 		w.WriteHeader(http.StatusOK)

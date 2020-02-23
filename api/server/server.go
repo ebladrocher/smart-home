@@ -3,9 +3,11 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/ebladrocher/smarthome/api/server/controllers"
+	adaptors "github.com/ebladrocher/smarthome/adaptors"
 	"github.com/ebladrocher/smarthome/system/store"
+	postgres "github.com/ebladrocher/smarthome/system/store/postgrestore"
 	"github.com/gorilla/mux"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"net/http"
 	"os"
@@ -15,22 +17,23 @@ import (
 
 // Server ...
 type Server struct {
-	Config      *ServerConfig
-	Controllers *controllers.Controllers
-	server      *http.Server
-	router      *mux.Router
-	store       store.Store
-	logger      *Logger
-	isStarted   bool
+	Config    *ServerConfig
+	//Handlers  *handlers.Handlers
+	server    *http.Server
+	router    *mux.Router
+	logger    *Logger
+	repository store.UseCase
+	isStarted bool
 }
 
 // Server ...
 func (s *Server) Start() error {
-	router := s.router
 
+	//handlers.NewHandlers(s.repository)
+	SetHandlers(s.router, s.repository)
 	s.server = &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", s.Config.Host, s.Config.Port),
-		Handler: router,
+		Handler: s.router,
 	}
 
 	//s.logger.Logger.Info(
@@ -68,19 +71,25 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // NewServer ...
 func NewServer(
 	cfg *ServerConfig,
-	store store.Store,
 	log *Logger,
 ) (*Server, error) {
 
+	store := postgres.InitDB()
+	userRepo := postgres.NewUserRepository(store)
+
 	newServer := &Server{
-		Config:      cfg,
-		Controllers: controllers.NewControllers(),
-		router:      mux.NewRouter(),
-		store:       store,
-		logger:      log,
+		Config:   cfg,
+		router:   mux.NewRouter(),
+		repository: adaptors.NewAuthUseCase(
+			userRepo,
+			viper.GetString("auth.hash_salt"),
+			[]byte(viper.GetString("auth.signing_key")),
+			viper.GetDuration("auth.token_ttl"),
+		),
+		logger:   log,
 	}
 
-	newServer.setControllers()
+	///newServer.setControllers()
 
 	return newServer, nil
 }

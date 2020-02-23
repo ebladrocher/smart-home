@@ -4,6 +4,6 @@ import "github.com/ebladrocher/smarthome/models"
 
 // UserRepository ...
 type UserRepository interface {
-	Create(*models.User) error
-	FindByEmail(string) (*models.User, error)
+	CreateUser(*models.User) error
+	GetUser(string) (*models.User, error)
 }

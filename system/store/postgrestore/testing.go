@@ -1,4 +1,4 @@
-package sqlstore
+package postgrestore
 
 import (
 	"database/sql"

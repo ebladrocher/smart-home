@@ -1,7 +1,7 @@
 package store_test
 
 import (
-	"github.com/ebladrocher/smarthome/system/store/sqlstore"
+	"github.com/ebladrocher/smarthome/system/store/postgrestore"
 	"os"
 	"testing"
 )
@@ -12,7 +12,7 @@ var (
 
 func TestMain(m *testing.M)  {
 
-	cfg := sqlstore.ConfigDB{
+	cfg := postgrestore.ConfigDB{
 		Host:"localhost",
 		Port:"5432",
 		Name: "smarthome_test",
