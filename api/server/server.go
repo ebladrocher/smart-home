@@ -26,10 +26,11 @@ type Server struct {
 
 // Server ...
 func (s *Server) Start() error {
+	router := s.router
 
 	s.server = &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", s.Config.Host, s.Config.Port),
-		Handler: s.router,
+		Handler: router,
 	}
 
 	//s.logger.Logger.Info(
@@ -58,26 +59,6 @@ func (s *Server) Start() error {
 }
 
 // Shutdown ...
-
-func (s *Server) Shutdown() {
-
-	if !s.isStarted {
-		return
-	}
-	s.isStarted = false
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-	if err := s.server.Shutdown(ctx); err != nil {
-		s.logger.Logger.Fatal(
-			"server running",
-			zap.Error(err),
-		)
-	}
-	s.logger.Logger.Info(
-		"Server exiting",
-	)
-}
 
 // ServeHTTP ...
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
