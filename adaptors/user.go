@@ -28,13 +28,13 @@ func NewAuthUseCase(
 	}
 }
 
-func (a *AuthUseCase) SignUp(username, password string) error {
+func (a *AuthUseCase) SignUp(email, password string) error {
 	pwd := sha1.New()
 	pwd.Write([]byte(password))
 	pwd.Write([]byte(a.hashSalt))
 
 	user := &models.User{
-		Email: username,
+		Email: email,
 		Password: fmt.Sprintf("%x", pwd.Sum(nil)),
 	}
 

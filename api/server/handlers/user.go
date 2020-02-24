@@ -17,7 +17,7 @@ func NewHandlerUser(useCase store.UseCase) *HandlerUser {
 }
 
 type SignInput struct {
-	Email string `json:"username"`
+	Email string `json:"email"`
 	Password string `json:"password"`
 }
 

@@ -30,7 +30,8 @@ type Server struct {
 func (s *Server) Start() error {
 
 	//handlers.NewHandlers(s.repository)
-	SetHandlers(s.router, s.repository)
+	//SetHandlers(s.router, s.repository)
+	
 	s.server = &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", s.Config.Host, s.Config.Port),
 		Handler: s.router,
@@ -88,7 +89,10 @@ func NewServer(
 		),
 		logger:   log,
 	}
-
+	SetHandlers(
+		newServer.router,
+		newServer.repository,
+		)
 	///newServer.setControllers()
 
 	return newServer, nil
