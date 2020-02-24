@@ -11,7 +11,7 @@ func SetHandlers(router *mux.Router, uc store.UseCase)  {
 
 	h := handlers.NewHandlers(uc)
 
-	//s.router.HandleFunc("/", s.Controllers.Index.HandleIndex()).Methods("GET")
+	// Index
 	router.HandleFunc("/", h.Index.HandleIndex()).Methods("GET")
 
 	// User

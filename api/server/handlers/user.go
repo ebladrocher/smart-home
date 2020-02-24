@@ -16,17 +16,17 @@ func NewHandlerUser(useCase store.UseCase) *HandlerUser {
 	}
 }
 
-type signInput struct {
-	Username string `json:"username"`
+type SignInput struct {
+	Email string `json:"username"`
 	Password string `json:"password"`
 }
 
 func (h *HandlerUser) SignUp(w http.ResponseWriter, r *http.Request) {
-	inp := new(signInput)
+	inp := new(SignInput)
 	json.NewDecoder(r.Body).Decode(inp)
 	//json.NewEncoder(w).Encode(p)
 
-	if err := h.useCase.SignUp(inp.Username, inp.Password); err != nil {
+	if err := h.useCase.SignUp(inp.Email, inp.Password); err != nil {
 		panic(err.Error())
 		return
 	}

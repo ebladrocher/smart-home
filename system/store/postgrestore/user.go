@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+// User ...
 type User struct {
 	ID       int
 	Email    string

@@ -8,25 +8,43 @@ import (
 	"testing"
 )
 
-func TestUserRepository_Create(t *testing.T) {
-	s := teststore.NewStore()
-	u := models.TestUser(t)
-	assert.NoError(t, s.User().Create(u))
-	assert.NotNil(t, u)
-}
+func TestGetUser(t *testing.T) {
+	s := teststore.NewUserLocalStorage()
 
-func TestUserRepository_FindByEmail(t *testing.T)  {
-	s := teststore.NewStore()
-	email := "user@user.org"
-	_, err := s.User().FindByEmail(email)
-	assert.EqualError(t, err, store.ErrRecordNotFound.Error())
+	id1 := "id"
 
-	u := models.TestUser(t)
-	u.Email = email
-	s.User().Create(u)
-	u, err = s.User().FindByEmail(email)
+	user := &models.User{
+		ID:       id1,
+		Email: "user",
+		Password: "password",
+	}
+
+	err := s.CreateUser(user)
 	assert.NoError(t, err)
-	assert.NotNil(t, u)
 
+	returnedUser, err := s.GetUser("user", "password")
+	assert.NoError(t, err)
+	assert.Equal(t, user, returnedUser)
 
+	returnedUser, err = s.GetUser("user", "")
+	assert.Error(t, err)
+	assert.Equal(t, err, store.ErrUserNotFound)
 }
+
+//func TestUserRepository_FindByEmail(t *testing.T)  {
+//	s := teststore.NewStore()
+//	email := "user@user.org"
+//	_, err := s.User().FindByEmail(email)
+//	assert.EqualError(t, err, store.ErrRecordNotFound.Error())
+//
+//	u := models.TestUser(t)
+//	u.Email = email
+//	s.User().Create(u)
+//	u, err = s.User().FindByEmail(email)
+//	assert.NoError(t, err)
+//	assert.NotNil(t, u)
+//
+//
+//}
+
+
