@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	adaptors "github.com/ebladrocher/smarthome/adaptors"
+	"github.com/ebladrocher/smarthome/system/config"
 	"github.com/ebladrocher/smarthome/system/store"
 	postgres "github.com/ebladrocher/smarthome/system/store/postgrestore"
 	"github.com/gorilla/mux"
-	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"net/http"
 	"os"
@@ -17,30 +17,21 @@ import (
 
 // Server ...
 type Server struct {
-	Config    *ServerConfig
-	//Handlers  *handlers.Handlers
-	server    *http.Server
-	router    *mux.Router
-	logger    *Logger
-	repository store.UseCase
-	isStarted bool
+	Config *ServerConfig
+	server *http.Server
+	router *mux.Router
+	logger *Logger
+	authUC store.UseCase
+	//isStarted  bool
 }
 
 // Server ...
 func (s *Server) Start() error {
 
-	//handlers.NewHandlers(s.repository)
-	//SetHandlers(s.router, s.repository)
-	
 	s.server = &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", s.Config.Host, s.Config.Port),
 		Handler: s.router,
 	}
-
-	//s.logger.Logger.Info(
-	//	"Server start at",
-	//	zap.Any(s.Config.Host, s.Config.Port),
-	//)
 
 	go func() {
 		if err := s.server.ListenAndServe(); err != nil {
@@ -50,6 +41,11 @@ func (s *Server) Start() error {
 			)
 		}
 	}()
+
+	//s.logger.Logger.Info(
+	//	"Server start at",
+	//	zap.Any(s.Config.Host, s.Config.Port),
+	//)
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, os.Interrupt)
@@ -72,28 +68,33 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // NewServer ...
 func NewServer(
 	cfg *ServerConfig,
+	dbUrl string,
 	log *Logger,
 ) (*Server, error) {
 
-	store := postgres.InitDB()
-	userRepo := postgres.NewUserRepository(store)
+	db := postgres.InitDB(dbUrl)
+	userRepo := postgres.NewUserRepository(db)
+
+	token, err := config.TokenInit()
+	if err != nil {
+		return nil, err
+	}
 
 	newServer := &Server{
-		Config:   cfg,
-		router:   mux.NewRouter(),
-		repository: adaptors.NewAuthUseCase(
+		Config: cfg,
+		router: mux.NewRouter(),
+		authUC: adaptors.NewAuthUseCase(
 			userRepo,
-			viper.GetString("auth.hash_salt"),
-			[]byte(viper.GetString("auth.signing_key")),
-			viper.GetDuration("auth.token_ttl"),
+			token.HashSalt,
+			[]byte(token.SigningKey),
+			token.Token,
 		),
-		logger:   log,
+		logger: log,
 	}
 	SetHandlers(
 		newServer.router,
-		newServer.repository,
-		)
-	///newServer.setControllers()
+		newServer.authUC,
+	)
 
 	return newServer, nil
 }

@@ -2,28 +2,16 @@ package models
 
 // User ...
 type User struct {
-	ID                string
-	Email             string
-	Password          string
+	ID       string `json:"id"`
+	Email    string `json:"email"`
+	Password string `json:"password,omitempty"`
 }
 
-//func (u  *User) Validate() error {
-//	return nil
+// Validate ...
+//func Valedate() error {
+//
 //}
-//
-//// Check Password ....
-//func (u *User) CheckPassword() error {
-//	if len(u.Password) > 0 {
-//		enc, err := encryptString(u.Password)
-//		if err != nil {
-//			return err
-//		}
-//
-//		u.EncryptedPassword = enc
-//	}
-//	return nil
-//}
-//
+
 //// Encrypt string
 //func encryptString(s string) (string, error) {
 //	e, err := bcrypt.GenerateFromPassword([]byte(s), bcrypt.MinCost)

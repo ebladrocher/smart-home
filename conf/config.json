@@ -4,5 +4,8 @@
   "mode": "debug",
   "db_host": "localhost",
   "db_name": "smarthome",
-  "db_port": "5432"
+  "db_port": "5432",
+  "hash_salt": "hash_salt",
+  "signing_key": "signing_key",
+  "token_ttl": 86400
 }

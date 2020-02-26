@@ -15,7 +15,8 @@ func SetHandlers(router *mux.Router, uc store.UseCase)  {
 	router.HandleFunc("/", h.Index.HandleIndex()).Methods("GET")
 
 	// User
-	router.HandleFunc("/auth/sign-up", h.User.SignUp).Methods("POST")
+	router.HandleFunc("/auth/sign-up", h.User.SignUp()).Methods("POST")
+	router.HandleFunc("/auth/sign-in", h.User.SignIn()).Methods("POST")
 
 }
 

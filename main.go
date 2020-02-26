@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/ebladrocher/smarthome/api/server"
 	"github.com/ebladrocher/smarthome/system/config"
-	"log"
+	postgres "github.com/ebladrocher/smarthome/system/store/postgrestore"
 )
 
 
@@ -13,14 +13,12 @@ func main() {
 
 // Start ...
 func start() {
-	if err := config.Init(); err != nil {
-		log.Fatalf("%s", err.Error())
-	}
-
 	cfg, _ :=config.ReadConfig()
+	dbUrl := postgres.NewDbConfig(cfg)
 
 	srv, err := server.NewServer(
 		server.NewServerConfig(cfg),
+		dbUrl.ConnectionSting(),
 		server.InitLogger(cfg),
 		)
 	if err != nil {
